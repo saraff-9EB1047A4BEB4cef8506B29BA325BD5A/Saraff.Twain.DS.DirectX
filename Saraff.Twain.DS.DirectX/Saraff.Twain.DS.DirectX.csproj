@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F9497D33-DB37-4551-B410-768FAEE597F3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Saraff.Twain.DS.DirectX</RootNamespace>
+    <AssemblyName>Saraff.Twain.DS.DirectX</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AForge, Version=2.2.5.0, Culture=neutral, PublicKeyToken=c1db6ff4eaa06aeb, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.2.2.5\lib\AForge.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Controls, Version=2.2.5.0, Culture=neutral, PublicKeyToken=a8ac264d1dc6b9d9, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.Controls.2.2.5\lib\AForge.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Imaging, Version=2.2.5.0, Culture=neutral, PublicKeyToken=ba8ddea9676ca48b, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.Imaging.2.2.5\lib\AForge.Imaging.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Math, Version=2.2.5.0, Culture=neutral, PublicKeyToken=abba2e25397ee8c9, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.Math.2.2.5\lib\AForge.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Video, Version=2.2.5.0, Culture=neutral, PublicKeyToken=cbfb6e07d173c401, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.Video.2.2.5\lib\AForge.Video.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Video.DirectShow, Version=2.2.5.0, Culture=neutral, PublicKeyToken=61ea4348d43881b7, processorArchitecture=MSIL">
+      <HintPath>..\packages\AForge.Video.DirectShow.2.2.5\lib\AForge.Video.DirectShow.dll</HintPath>
+    </Reference>
+    <Reference Include="Saraff.IoC, Version=1.0.11.670, Culture=neutral, PublicKeyToken=941762d7e2681ad9, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saraff.IoC.1.0.11.670\lib\net40\Saraff.IoC.dll</HintPath>
+    </Reference>
+    <Reference Include="Saraff.Twain.DS, Version=1.0.4.675, Culture=neutral, PublicKeyToken=d59c866b4519678c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saraff.Twain.DS.1.0.4.675\lib\net40\Saraff.Twain.DS.dll</HintPath>
+    </Reference>
+    <Reference Include="Saraff.Twain.DS.BitmapSource, Version=1.0.4.546, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saraff.Twain.DS.BitmapSource.1.0.4.546\lib\net40\Saraff.Twain.DS.BitmapSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Capabilities\BitDepthDataSourceCapability.cs" />
+    <Compile Include="Capabilities\CustomInterfaceGuidDataSourceCapability.cs" />
+    <Compile Include="Capabilities\DeviceOnlineDataSourceCapability.cs" />
+    <Compile Include="Capabilities\FrameBppDataSourceCapability.cs" />
+    <Compile Include="Capabilities\FrameHeightDataSourceCapability.cs" />
+    <Compile Include="Capabilities\FrameWidthDataSourceCapability.cs" />
+    <Compile Include="Capabilities\IsRunningDataSourceCapability.cs" />
+    <Compile Include="Capabilities\VideoDevicesDataSourceCapability.cs" />
+    <Compile Include="Capabilities\XResolutionDataSourceCapability.cs" />
+    <Compile Include="Capabilities\YResolutionDataSourceCapability.cs" />
+    <Compile Include="ComponentModel\IAcquiredImages.cs" />
+    <Compile Include="ComponentModel\IPersistent.cs" />
+    <Compile Include="Core\_AcquiredImages.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core\_LogService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core\_PersistentService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core\_VideoDevices.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ComponentModel\IVideoDevices.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="MediaDataSource.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ComponentModel\ImageTagInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DataSourceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\DataSourceForm.Designer.cs">
+      <DependentUpon>DataSourceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ThumbnailControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\ThumbnailControl.Designer.cs">
+      <DependentUpon>ThumbnailControl.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\DataSources\Saraff.Twain.DS.DirectX.UI.DataSourceForm+CapabilityView.datasource" />
+    <None Include="Properties\DataSources\Saraff.Twain.DS.DirectX.UI.DataSourceForm+FilterInfoView.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="COPYING.txt" />
+    <None Include="Resources\DeleteHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\DataSourceForm.resx">
+      <DependentUpon>DataSourceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ThumbnailControl.resx">
+      <DependentUpon>ThumbnailControl.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
