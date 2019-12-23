@@ -100,6 +100,7 @@ namespace Saraff.Twain.DS.DirectX {
         protected override void OnEnableDS(bool showUI, bool modalUI, IntPtr hwnd) {
             if(showUI) {
                 this._form = this.Factory.CreateInstance<UI.DataSourceForm>();
+                this._form.FormClosed += (sender, e) => this.OnCloseDSReq();
                 this._form.DoneCallback += (sender, e) => this.OnXferReady();
                 this._form.Show();
             } else {
