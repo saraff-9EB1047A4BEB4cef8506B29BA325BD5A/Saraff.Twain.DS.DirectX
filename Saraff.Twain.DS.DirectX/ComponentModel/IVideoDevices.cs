@@ -42,11 +42,15 @@ namespace Saraff.Twain.DS.DirectX.ComponentModel {
 
         List<VideoCaptureDevice> Get();
 
-        VideoCaptureDevice Current {
-            get;
-        }
+        void SimulateTrigger();
+
+        VideoCaptureDevice Current { get; }
 
         int Position { get; set; }
+
+        VideoCapabilities SnapshotResolution { get; set; }
+
+        VideoCapabilities[] SnapshotCapabilities { get; }
 
         event EventHandler<NewFrameEventArgs> NewFrame;
 

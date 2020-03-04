@@ -44,6 +44,7 @@ namespace Saraff.Twain.DS.DirectX.Core {
     internal sealed class _VideoDevices : Component, IVideoDevices {
         private List<VideoCaptureDevice> _devices = null;
         private int _current = -1;
+        private bool _newFrameRequired = false;
 
         #region IVideoDevices
 
@@ -80,10 +81,8 @@ namespace Saraff.Twain.DS.DirectX.Core {
                 this._devices = new FilterInfoCollection(FilterCategory.VideoInputDevice)
                     .Cast<FilterInfo>()
                     .Select(x => new VideoCaptureDevice(x.MonikerString))
-                    .Where(x => x.SnapshotCapabilities.Length > 0)
                     .ToList();
                 if(this._devices.Count > 0) {
-
                     var _source = this.PersistentServise?.SourceMonikerString;
                     if(_source != null) {
                         this.Position = this._devices
@@ -97,11 +96,34 @@ namespace Saraff.Twain.DS.DirectX.Core {
             return this._devices;
         }
 
+        public void SimulateTrigger() {
+            if(this.IsSnapshotSupported) {
+                this.Current.SimulateTrigger();
+            } else {
+                this._newFrameRequired = true;
+            }
+        }
+
+        public VideoCapabilities SnapshotResolution {
+            get => this.IsSnapshotSupported ? this.Current.SnapshotResolution : this.Current.VideoResolution;
+            set {
+                if(this.IsSnapshotSupported) {
+                    this.Current.SnapshotResolution = value;
+                } else {
+                    this.Current.VideoResolution = value;
+                }
+            }
+        }
+
+        public VideoCapabilities[] SnapshotCapabilities => this.IsSnapshotSupported ? this.Current.SnapshotCapabilities : this.Current.VideoCapabilities;
+
         public event EventHandler<NewFrameEventArgs> NewFrame;
 
         public event EventHandler<NewFrameEventArgs> SnapshotFrame;
 
         #endregion
+
+        private bool IsSnapshotSupported => this.Current.SnapshotCapabilities.Length > 0;
 
         [IoC.ServiceRequired]
         public IPersistent PersistentServise { get; set; }
@@ -114,7 +136,16 @@ namespace Saraff.Twain.DS.DirectX.Core {
             }
         }
 
-        private void _NewFrameHandler(object sender, NewFrameEventArgs e) => this.NewFrame?.Invoke(this, e);
+        private void _NewFrameHandler(object sender, NewFrameEventArgs e) {
+            if(this._newFrameRequired) {
+                try {
+                    this.SnapshotFrame?.Invoke(this, e);
+                } finally {
+                    this._newFrameRequired = false;
+                }
+            }
+            this.NewFrame?.Invoke(this, e);
+        }
 
         private void _SnapshotFrameHandler(object sender, NewFrameEventArgs e) => this.SnapshotFrame?.Invoke(this, e);
     }

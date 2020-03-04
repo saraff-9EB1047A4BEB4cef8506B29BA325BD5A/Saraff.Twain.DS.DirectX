@@ -111,17 +111,17 @@ namespace Saraff.Twain.DS.DirectX.UI {
         private void _Connect() {
             var _device = this._CurrentFilterInfoView?.VideoDevice;
             if(_device != null) {
-                this.capabilityViewBindingSource.DataSource = _device.SnapshotCapabilities
+                this.capabilityViewBindingSource.DataSource = this.VideoDevices().SnapshotCapabilities
                     .Select(x => this.Factory.CreateInstance<CapabilityView>(i => i("value", x)))
                     .ToList();
 
-                if(_device.SnapshotResolution == null) {
+                if(this.VideoDevices().SnapshotResolution == null) {
                     var _size = this.PersistentService?.SourceSnapshotResolution;
-                    _device.SnapshotResolution = _device.SnapshotCapabilities.FirstOrDefault(x => x.FrameSize == _size) ?? _device.SnapshotCapabilities.FirstOrDefault();
+                    this.VideoDevices().SnapshotResolution = this.VideoDevices().SnapshotCapabilities.FirstOrDefault(x => x.FrameSize == _size) ?? this.VideoDevices().SnapshotCapabilities.FirstOrDefault();
                 }
-                this.capabilityViewBindingSource.Position = _device.SnapshotCapabilities
+                this.capabilityViewBindingSource.Position = this.VideoDevices().SnapshotCapabilities
                     .Select((x, i) => new { Element = x, Index = i })
-                    .FirstOrDefault(x => x.Element.FrameSize == _device.SnapshotResolution.FrameSize && x.Element.BitCount == _device.SnapshotResolution.BitCount)?.Index ?? 0;
+                    .FirstOrDefault(x => x.Element.FrameSize == this.VideoDevices().SnapshotResolution.FrameSize && x.Element.BitCount == this.VideoDevices().SnapshotResolution.BitCount)?.Index ?? 0;
 
                 this.capabilityViewBindingSource.CurrentChanged += this._CapabilityViewBindingSourceCurrentChanged;
 
@@ -207,7 +207,7 @@ namespace Saraff.Twain.DS.DirectX.UI {
 
         private void _AcquireClick(object sender, EventArgs e) {
             try {
-                this._CurrentFilterInfoView?.VideoDevice.SimulateTrigger();
+                this.VideoDevices().SimulateTrigger();
             } catch(Exception ex) {
                 this.Log?.Write(ex);
             }
