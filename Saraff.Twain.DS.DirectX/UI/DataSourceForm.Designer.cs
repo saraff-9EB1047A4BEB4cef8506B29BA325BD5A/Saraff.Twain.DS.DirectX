@@ -68,6 +68,8 @@ namespace Saraff.Twain.DS.DirectX.UI {
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.capabilityViewBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.transferImmediatelyCheckBox = new System.Windows.Forms.CheckBox();
+            this.comboBox3 = new System.Windows.Forms.ComboBox();
+            this.rotateFlipTypeViewBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -75,6 +77,7 @@ namespace Saraff.Twain.DS.DirectX.UI {
             ((System.ComponentModel.ISupportInitialize)(this.filterInfoViewBindingSource)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.capabilityViewBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rotateFlipTypeViewBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // player
@@ -85,6 +88,7 @@ namespace Saraff.Twain.DS.DirectX.UI {
             this.player.Size = new System.Drawing.Size(493, 386);
             this.player.TabIndex = 0;
             this.player.VideoSource = null;
+            this.player.NewFrame += new AForge.Controls.VideoSourcePlayer.NewFrameHandler(this._PlayerNewFrame);
             // 
             // splitContainer1
             // 
@@ -203,18 +207,36 @@ namespace Saraff.Twain.DS.DirectX.UI {
             this.transferImmediatelyCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.transferImmediatelyCheckBox.AutoSize = true;
             this.transferImmediatelyCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.transferImmediatelyCheckBox.Location = new System.Drawing.Point(12, 460);
+            this.transferImmediatelyCheckBox.Location = new System.Drawing.Point(12, 462);
             this.transferImmediatelyCheckBox.Name = "transferImmediatelyCheckBox";
             this.transferImmediatelyCheckBox.Size = new System.Drawing.Size(181, 17);
             this.transferImmediatelyCheckBox.TabIndex = 2;
             this.transferImmediatelyCheckBox.Text = "Transfer immediately after acquire";
             this.transferImmediatelyCheckBox.UseVisualStyleBackColor = true;
             // 
+            // comboBox3
+            // 
+            this.comboBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.comboBox3.DataSource = this.rotateFlipTypeViewBindingSource;
+            this.comboBox3.DisplayMember = "Name";
+            this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBox3.FormattingEnabled = true;
+            this.comboBox3.Location = new System.Drawing.Point(268, 458);
+            this.comboBox3.Name = "comboBox3";
+            this.comboBox3.Size = new System.Drawing.Size(194, 21);
+            this.comboBox3.TabIndex = 5;
+            // 
+            // rotateFlipTypeViewBindingSource
+            // 
+            this.rotateFlipTypeViewBindingSource.DataSource = typeof(Saraff.Twain.DS.DirectX.UI.DataSourceForm.RotateFlipTypeView);
+            // 
             // DataSourceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(682, 491);
+            this.Controls.Add(this.comboBox3);
             this.Controls.Add(this.transferImmediatelyCheckBox);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.acquireButton);
@@ -232,6 +254,7 @@ namespace Saraff.Twain.DS.DirectX.UI {
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.capabilityViewBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rotateFlipTypeViewBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -251,5 +274,7 @@ namespace Saraff.Twain.DS.DirectX.UI {
         private System.Windows.Forms.BindingSource filterInfoViewBindingSource;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.BindingSource capabilityViewBindingSource;
+        private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.BindingSource rotateFlipTypeViewBindingSource;
     }
 }

@@ -68,8 +68,8 @@ using IoC = Saraff.Twain.DS.IoC;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.3.701")]
-[assembly: AssemblyFileVersion("1.0.3.701")]
+[assembly: AssemblyVersion("1.0.3.702")]
+[assembly: AssemblyFileVersion("1.0.3.702")]
 
 [assembly: DataSource(typeof(MediaDataSource), MaxConnectionCount = 1)]
 [assembly: IoC.BindService(typeof(Extensions.ILog), typeof(Saraff.Twain.DS.DirectX.Core._LogService))]

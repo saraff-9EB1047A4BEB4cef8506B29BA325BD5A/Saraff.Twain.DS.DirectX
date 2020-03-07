@@ -39,19 +39,12 @@ namespace Saraff.Twain.DS.DirectX.ComponentModel {
 
     public interface IPersistent {
 
-        bool IsTransferImmediately {
-            get;
-            set;
-        }
+        bool IsTransferImmediately { get; set; }
 
-        string SourceMonikerString {
-            get;
-            set;
-        }
+        string SourceMonikerString { get; set; }
 
-        Size SourceSnapshotResolution {
-            get;
-            set;
-        }
+        Size SourceSnapshotResolution { get; set; }
+
+        RotateFlipType RotateFlipType { get; set; }
     }
 }

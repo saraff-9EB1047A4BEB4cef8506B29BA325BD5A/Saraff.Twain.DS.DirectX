@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="COPYING.txt" />
+    <None Include="Properties\DataSources\Saraff.Twain.DS.DirectX.UI.DataSourceForm+RotateFlipTypeView.datasource" />
     <None Include="Resources\DeleteHS.png" />
   </ItemGroup>
   <ItemGroup>

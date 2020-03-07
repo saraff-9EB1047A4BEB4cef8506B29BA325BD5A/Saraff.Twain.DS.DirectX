@@ -75,6 +75,11 @@ namespace Saraff.Twain.DS.DirectX.Core {
             }
         }
 
+        public RotateFlipType RotateFlipType {
+            get => (RotateFlipType)(int)this.RegistryKey.GetValue(nameof(_PersistentService.RotateFlipType), RotateFlipType.RotateNoneFlipNone);
+            set => this.RegistryKey.SetValue(nameof(_PersistentService.RotateFlipType), (int)value, RegistryValueKind.DWord);
+        }
+
         #endregion
 
         protected override void Dispose(bool disposing) {

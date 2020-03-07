@@ -51,12 +51,32 @@ namespace Saraff.Twain.DS.DirectX.UI {
         protected override void OnLoad(EventArgs e) {
             base.OnLoad(e);
             try {
+                this.rotateFlipTypeViewBindingSource.DataSource =
+                    new RotateFlipType[] {
+                        RotateFlipType.RotateNoneFlipNone,
+                        RotateFlipType.Rotate90FlipNone,
+                        RotateFlipType.Rotate180FlipNone,
+                        RotateFlipType.Rotate270FlipNone,
+                        RotateFlipType.RotateNoneFlipX,
+                        RotateFlipType.Rotate90FlipX,
+                        RotateFlipType.RotateNoneFlipY,
+                        RotateFlipType.Rotate90FlipY }
+                    .Select(x => this.Factory.CreateInstance<RotateFlipTypeView>(i => i("value", x)))
+                    .ToList()
+                    .AsReadOnly();
+                var _rotateId = this.PersistentService?.RotateFlipType ?? RotateFlipType.RotateNoneFlipNone;
+                this.rotateFlipTypeViewBindingSource.Position = this.rotateFlipTypeViewBindingSource.Cast<RotateFlipTypeView>()
+                    .Select((x, i) => new { Value = x, Index = i })
+                    .FirstOrDefault(x => x.Value.RotateFlipType == _rotateId).Index;
+                this.rotateFlipTypeViewBindingSource.CurrentChanged += this._RotateFlipTypeViewBindingSourceCurrentChanged;
+
                 this.filterInfoViewBindingSource.DataSource = this.VideoDevices()?.Get()
                     .Select(x => this.Factory.CreateInstance<FilterInfoView>(i => i("device", x)))
                     .ToList()
                     .AsReadOnly();
                 this.filterInfoViewBindingSource.Position = this.VideoDevices()?.Position ?? this.filterInfoViewBindingSource.Position;
                 this.filterInfoViewBindingSource.CurrentChanged += this._FilterInfoViewBindingSourceCurrentChanged;
+
                 this.VideoDevices().SnapshotFrame += this._FrameHandler;
                 this._Connect();
                 this._IsTransferImmediately = this.PersistentService?.IsTransferImmediately ?? false;
@@ -73,6 +93,7 @@ namespace Saraff.Twain.DS.DirectX.UI {
                 if(this.PersistentService != null) {
                     this.PersistentService.IsTransferImmediately = this._IsTransferImmediately;
                     this.PersistentService.SourceSnapshotResolution = this._CurrentCapabilityView?.Value.FrameSize ?? Size.Empty;
+                    this.PersistentService.RotateFlipType = this._CurrentRotateFlipTypeView.RotateFlipType;
                 }
             } catch(Exception ex) {
                 this.Log?.Write(ex);
@@ -93,7 +114,9 @@ namespace Saraff.Twain.DS.DirectX.UI {
 
         private void _FrameHandler(object sender, AForge.Video.NewFrameEventArgs e) => this.Invoke(new MethodInvoker(() => {
             try {
-                this._AddThumbnail(this.AcquiredImages.Add(e.Frame.Clone() as Bitmap));
+                var _image = e.Frame.Clone() as Bitmap;
+                _image.RotateFlip(this._CurrentRotateFlipTypeView.RotateFlipType);
+                this._AddThumbnail(this.AcquiredImages.Add(_image));
                 if(this._IsTransferImmediately) {
                     this.OnDoneCallback(EventArgs.Empty);
                 }
@@ -143,8 +166,8 @@ namespace Saraff.Twain.DS.DirectX.UI {
 
         private void _Resize() {
             var _frame = this._CurrentCapabilityView.Value.FrameSize;
-            this.Width -= this.player.Width - _frame.Width;
-            this.Height -= this.player.Height - _frame.Height;
+            this.Width -= this.player.Width - (this._CurrentRotateFlipTypeView.IsToSide ? _frame.Height : _frame.Width);
+            this.Height -= this.player.Height - (this._CurrentRotateFlipTypeView.IsToSide ? _frame.Width : _frame.Height);
         }
 
         #region Properties
@@ -157,6 +180,8 @@ namespace Saraff.Twain.DS.DirectX.UI {
         private FilterInfoView _CurrentFilterInfoView => this.filterInfoViewBindingSource.Current as FilterInfoView;
 
         private CapabilityView _CurrentCapabilityView => this.capabilityViewBindingSource.Current as CapabilityView;
+
+        private RotateFlipTypeView _CurrentRotateFlipTypeView => this.rotateFlipTypeViewBindingSource.Current as RotateFlipTypeView;
 
         [IoC.ServiceRequired]
         public IoC.Lazy<IVideoDevices> VideoDevices { get; set; }
@@ -205,6 +230,14 @@ namespace Saraff.Twain.DS.DirectX.UI {
             }
         }
 
+        private void _RotateFlipTypeViewBindingSourceCurrentChanged(object sender, EventArgs e) {
+            try {
+                this._Resize();
+            } catch(Exception ex) {
+                this.Log?.Write(ex);
+            }
+        }
+
         private void _AcquireClick(object sender, EventArgs e) {
             try {
                 this.VideoDevices().SimulateTrigger();
@@ -216,6 +249,14 @@ namespace Saraff.Twain.DS.DirectX.UI {
         private void _DoneClick(object sender, EventArgs e) {
             try {
                 this.OnDoneCallback(EventArgs.Empty);
+            } catch(Exception ex) {
+                this.Log?.Write(ex);
+            }
+        }
+
+        private void _PlayerNewFrame(object sender, ref Bitmap image) {
+            try {
+                image.RotateFlip(this._CurrentRotateFlipTypeView.RotateFlipType);
             } catch(Exception ex) {
                 this.Log?.Write(ex);
             }
@@ -255,6 +296,29 @@ namespace Saraff.Twain.DS.DirectX.UI {
             public string Name => $"{this._cap.FrameSize.Width} x {this._cap.FrameSize.Height}, {this._cap.BitCount}bpp";
 
             public VideoCapabilities Value => this._cap;
+        }
+
+        public sealed class RotateFlipTypeView { 
+
+            [IoC.ServiceRequired]
+            public RotateFlipTypeView(RotateFlipType value) {
+                this.RotateFlipType = value;
+            }
+
+            public RotateFlipType RotateFlipType { get; private set; }
+
+            public string Name => this.RotateFlipType.ToString();
+
+            public bool IsToSide => new RotateFlipType[] {
+                RotateFlipType.Rotate90FlipNone,
+                RotateFlipType.Rotate90FlipX,
+                RotateFlipType.Rotate90FlipXY,
+                RotateFlipType.Rotate90FlipY,
+                RotateFlipType.Rotate270FlipNone,
+                RotateFlipType.Rotate270FlipX,
+                RotateFlipType.Rotate270FlipXY,
+                RotateFlipType.Rotate270FlipY 
+            }.Contains(this.RotateFlipType);
         }
     }
 }
