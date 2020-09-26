@@ -92,7 +92,7 @@ namespace Saraff.Twain.DS.DirectX.UI {
 
                 if(this.PersistentService != null) {
                     this.PersistentService.IsTransferImmediately = this._IsTransferImmediately;
-                    this.PersistentService.SourceSnapshotResolution = this._CurrentCapabilityView?.Value.FrameSize ?? Size.Empty;
+                    this.PersistentService.SourceSnapshotResolution = this._CurrentShapshotView?.Value.FrameSize ?? Size.Empty;
                     this.PersistentService.RotateFlipType = this._CurrentRotateFlipTypeView.RotateFlipType;
                 }
             } catch(Exception ex) {
@@ -134,7 +134,10 @@ namespace Saraff.Twain.DS.DirectX.UI {
         private void _Connect() {
             var _device = this._CurrentFilterInfoView?.VideoDevice;
             if(_device != null) {
-                this.capabilityViewBindingSource.DataSource = this.VideoDevices().SnapshotCapabilities
+
+                #region Snapshot
+
+                this.snapshotBindingSource.DataSource = this.VideoDevices().SnapshotCapabilities
                     .Select(x => this.Factory.CreateInstance<CapabilityView>(i => i("value", x)))
                     .ToList();
 
@@ -142,11 +145,31 @@ namespace Saraff.Twain.DS.DirectX.UI {
                     var _size = this.PersistentService?.SourceSnapshotResolution;
                     this.VideoDevices().SnapshotResolution = this.VideoDevices().SnapshotCapabilities.FirstOrDefault(x => x.FrameSize == _size) ?? this.VideoDevices().SnapshotCapabilities.FirstOrDefault();
                 }
-                this.capabilityViewBindingSource.Position = this.VideoDevices().SnapshotCapabilities
+                this.snapshotBindingSource.Position = this.VideoDevices().SnapshotCapabilities
                     .Select((x, i) => new { Element = x, Index = i })
                     .FirstOrDefault(x => x.Element.FrameSize == this.VideoDevices().SnapshotResolution.FrameSize && x.Element.BitCount == this.VideoDevices().SnapshotResolution.BitCount)?.Index ?? 0;
 
-                this.capabilityViewBindingSource.CurrentChanged += this._CapabilityViewBindingSourceCurrentChanged;
+                this.snapshotBindingSource.CurrentChanged += this._SnapshotBindingSourceCurrentChanged;
+
+                #endregion
+
+                #region Video
+
+                this.videoBindingSource.DataSource = this.VideoDevices().VideoCapabilities
+                   .Select(x => this.Factory.CreateInstance<CapabilityView>(i => i("value", x)))
+                   .ToList();
+
+                if(this.VideoDevices().VideoResolution == null) {
+                    var _size = this.PersistentService?.SourceVideoResolution;
+                    this.VideoDevices().VideoResolution = this.VideoDevices().VideoCapabilities.FirstOrDefault(x => x.FrameSize == _size) ?? this.VideoDevices().VideoCapabilities.FirstOrDefault();
+                }
+                this.videoBindingSource.Position = this.VideoDevices().VideoCapabilities
+                    .Select((x, i) => new { Element = x, Index = i })
+                    .FirstOrDefault(x => x.Element.FrameSize == this.VideoDevices().VideoResolution.FrameSize && x.Element.BitCount == this.VideoDevices().VideoResolution.BitCount)?.Index ?? 0;
+
+                this.videoBindingSource.CurrentChanged += this._VideoBindingSourceCurrentChanged;
+
+                #endregion
 
                 this._Resize();
 
@@ -156,7 +179,7 @@ namespace Saraff.Twain.DS.DirectX.UI {
         }
 
         private void _Disconnect() {
-            this.capabilityViewBindingSource.CurrentChanged -= this._CapabilityViewBindingSourceCurrentChanged;
+            this.snapshotBindingSource.CurrentChanged -= this._SnapshotBindingSourceCurrentChanged;
             if(this.player.VideoSource != null) {
                 this.player.SignalToStop();
                 this.player.WaitForStop();
@@ -165,9 +188,20 @@ namespace Saraff.Twain.DS.DirectX.UI {
         }
 
         private void _Resize() {
-            var _frame = this._CurrentCapabilityView.Value.FrameSize;
-            this.Width -= this.player.Width - (this._CurrentRotateFlipTypeView.IsToSide ? _frame.Height : _frame.Width);
-            this.Height -= this.player.Height - (this._CurrentRotateFlipTypeView.IsToSide ? _frame.Width : _frame.Height);
+            var _frame = this._CurrentVideoView.Value.FrameSize;
+
+            var _area = Screen.PrimaryScreen.WorkingArea.Size;
+            var _width = this.Width - this.player.Width + (this._CurrentRotateFlipTypeView.IsToSide ? _frame.Height : _frame.Width);
+            var _height = this.Height - this.player.Height + (this._CurrentRotateFlipTypeView.IsToSide ? _frame.Width : _frame.Height);
+
+            if(_width < _area.Width && _height < _area.Height) {
+                this.Width = _width;
+                this.Height = _height;
+            } else {
+                this.Location = Point.Empty;
+                this.Width = _width * Math.Min(_area.Height, _height * Math.Min(_area.Width, _width) / _width) / _height;
+                this.Height = _height * Math.Min(_area.Width, _width * Math.Min(_area.Height, _height) / _height) / _width;
+            }
         }
 
         #region Properties
@@ -179,7 +213,9 @@ namespace Saraff.Twain.DS.DirectX.UI {
 
         private FilterInfoView _CurrentFilterInfoView => this.filterInfoViewBindingSource.Current as FilterInfoView;
 
-        private CapabilityView _CurrentCapabilityView => this.capabilityViewBindingSource.Current as CapabilityView;
+        private CapabilityView _CurrentShapshotView => this.snapshotBindingSource.Current as CapabilityView;
+
+        private CapabilityView _CurrentVideoView => this.videoBindingSource.Current as CapabilityView;
 
         private RotateFlipTypeView _CurrentRotateFlipTypeView => this.rotateFlipTypeViewBindingSource.Current as RotateFlipTypeView;
 
@@ -212,14 +248,30 @@ namespace Saraff.Twain.DS.DirectX.UI {
             }
         }
 
-        private void _CapabilityViewBindingSourceCurrentChanged(object sender, EventArgs e) {
+        private void _SnapshotBindingSourceCurrentChanged(object sender, EventArgs e) {
             try {
-                var _cap = this._CurrentCapabilityView?.Value;
+                var _cap = this._CurrentShapshotView?.Value;
                 var _device = this._CurrentFilterInfoView?.VideoDevice;
                 if(_device != null && _cap != null) {
                     _device.SignalToStop();
                     _device.WaitForStop();
                     _device.SnapshotResolution = _cap;
+
+                    _device.Start();
+                }
+            } catch(Exception ex) {
+                this.Log?.Write(ex);
+            }
+        }
+
+        private void _VideoBindingSourceCurrentChanged(object sender, EventArgs e) {
+            try {
+                var _cap = this._CurrentVideoView?.Value;
+                var _device = this._CurrentFilterInfoView?.VideoDevice;
+                if(_device != null && _cap != null) {
+                    _device.SignalToStop();
+                    _device.WaitForStop();
+                    _device.VideoResolution = _cap;
 
                     this._Resize();
 

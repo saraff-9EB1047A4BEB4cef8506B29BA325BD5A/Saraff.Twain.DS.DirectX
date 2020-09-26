@@ -52,6 +52,10 @@ namespace Saraff.Twain.DS.DirectX.ComponentModel {
 
         VideoCapabilities[] SnapshotCapabilities { get; }
 
+        VideoCapabilities VideoResolution { get; set; }
+
+        VideoCapabilities[] VideoCapabilities { get; }
+
         event EventHandler<NewFrameEventArgs> NewFrame;
 
         event EventHandler<NewFrameEventArgs> SnapshotFrame;

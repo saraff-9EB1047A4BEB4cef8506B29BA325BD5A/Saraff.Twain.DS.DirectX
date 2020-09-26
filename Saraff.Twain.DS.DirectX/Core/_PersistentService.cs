@@ -75,6 +75,23 @@ namespace Saraff.Twain.DS.DirectX.Core {
             }
         }
 
+        public Size SourceVideoResolution {
+            get {
+                using(var _stream = new MemoryStream(this.RegistryKey.GetValue(nameof(_PersistentService.SourceVideoResolution), new byte[0]) as byte[])) {
+                    if(_stream.Length == 0) {
+                        return Size.Empty;
+                    }
+                    return (Size)new SoapFormatter().Deserialize(_stream);
+                }
+            }
+            set {
+                using(var _stream = new MemoryStream()) {
+                    new SoapFormatter().Serialize(_stream, value);
+                    this.RegistryKey.SetValue(nameof(_PersistentService.SourceVideoResolution), _stream.ToArray(), RegistryValueKind.Binary);
+                }
+            }
+        }
+
         public RotateFlipType RotateFlipType {
             get => (RotateFlipType)(int)this.RegistryKey.GetValue(nameof(_PersistentService.RotateFlipType), RotateFlipType.RotateNoneFlipNone);
             set => this.RegistryKey.SetValue(nameof(_PersistentService.RotateFlipType), (int)value, RegistryValueKind.DWord);

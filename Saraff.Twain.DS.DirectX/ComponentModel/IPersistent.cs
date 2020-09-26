@@ -45,6 +45,8 @@ namespace Saraff.Twain.DS.DirectX.ComponentModel {
 
         Size SourceSnapshotResolution { get; set; }
 
+        Size SourceVideoResolution { get; set; }
+
         RotateFlipType RotateFlipType { get; set; }
     }
 }

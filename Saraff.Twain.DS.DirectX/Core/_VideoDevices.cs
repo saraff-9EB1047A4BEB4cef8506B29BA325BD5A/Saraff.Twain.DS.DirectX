@@ -117,6 +117,13 @@ namespace Saraff.Twain.DS.DirectX.Core {
 
         public VideoCapabilities[] SnapshotCapabilities => this.IsSnapshotSupported ? this.Current.SnapshotCapabilities : this.Current.VideoCapabilities;
 
+        public VideoCapabilities VideoResolution {
+            get => this.Current.VideoResolution;
+            set => this.Current.VideoResolution = value;
+        }
+
+        public VideoCapabilities[] VideoCapabilities => this.Current.VideoCapabilities;
+
         public event EventHandler<NewFrameEventArgs> NewFrame;
 
         public event EventHandler<NewFrameEventArgs> SnapshotFrame;

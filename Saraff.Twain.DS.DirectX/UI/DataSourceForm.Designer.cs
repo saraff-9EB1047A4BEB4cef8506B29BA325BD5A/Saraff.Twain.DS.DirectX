@@ -64,9 +64,12 @@ namespace Saraff.Twain.DS.DirectX.UI {
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.filterInfoViewBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.videoBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.capabilityViewBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.snapshotBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.transferImmediatelyCheckBox = new System.Windows.Forms.CheckBox();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.rotateFlipTypeViewBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -76,7 +79,8 @@ namespace Saraff.Twain.DS.DirectX.UI {
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.filterInfoViewBindingSource)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.capabilityViewBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.videoBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.snapshotBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rotateFlipTypeViewBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -154,7 +158,7 @@ namespace Saraff.Twain.DS.DirectX.UI {
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(6, 19);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(444, 21);
+            this.comboBox1.Size = new System.Drawing.Size(294, 21);
             this.comboBox1.TabIndex = 1;
             // 
             // filterInfoViewBindingSource
@@ -165,6 +169,8 @@ namespace Saraff.Twain.DS.DirectX.UI {
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.comboBox4);
+            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.comboBox2);
             this.groupBox1.Controls.Add(this.comboBox1);
@@ -175,20 +181,47 @@ namespace Saraff.Twain.DS.DirectX.UI {
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Device";
             // 
+            // comboBox4
+            // 
+            this.comboBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox4.DataSource = this.videoBindingSource;
+            this.comboBox4.DisplayMember = "Name";
+            this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.comboBox4.FormattingEnabled = true;
+            this.comboBox4.Location = new System.Drawing.Point(346, 19);
+            this.comboBox4.Name = "comboBox4";
+            this.comboBox4.Size = new System.Drawing.Size(121, 21);
+            this.comboBox4.TabIndex = 4;
+            // 
+            // videoBindingSource
+            // 
+            this.videoBindingSource.DataSource = typeof(Saraff.Twain.DS.DirectX.UI.DataSourceForm.CapabilityView);
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(306, 22);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(34, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Video";
+            // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(468, 22);
+            this.label1.Location = new System.Drawing.Point(473, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(57, 13);
+            this.label1.Size = new System.Drawing.Size(52, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Resolution";
+            this.label1.Text = "Snapshot";
             // 
             // comboBox2
             // 
             this.comboBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox2.DataSource = this.capabilityViewBindingSource;
+            this.comboBox2.DataSource = this.snapshotBindingSource;
             this.comboBox2.DisplayMember = "Name";
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -198,9 +231,9 @@ namespace Saraff.Twain.DS.DirectX.UI {
             this.comboBox2.Size = new System.Drawing.Size(121, 21);
             this.comboBox2.TabIndex = 0;
             // 
-            // capabilityViewBindingSource
+            // snapshotBindingSource
             // 
-            this.capabilityViewBindingSource.DataSource = typeof(Saraff.Twain.DS.DirectX.UI.DataSourceForm.CapabilityView);
+            this.snapshotBindingSource.DataSource = typeof(Saraff.Twain.DS.DirectX.UI.DataSourceForm.CapabilityView);
             // 
             // transferImmediatelyCheckBox
             // 
@@ -253,7 +286,8 @@ namespace Saraff.Twain.DS.DirectX.UI {
             ((System.ComponentModel.ISupportInitialize)(this.filterInfoViewBindingSource)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.capabilityViewBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.videoBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.snapshotBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rotateFlipTypeViewBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -273,8 +307,11 @@ namespace Saraff.Twain.DS.DirectX.UI {
         private System.Windows.Forms.CheckBox transferImmediatelyCheckBox;
         private System.Windows.Forms.BindingSource filterInfoViewBindingSource;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.BindingSource capabilityViewBindingSource;
+        private System.Windows.Forms.BindingSource snapshotBindingSource;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.BindingSource rotateFlipTypeViewBindingSource;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.BindingSource videoBindingSource;
     }
 }
